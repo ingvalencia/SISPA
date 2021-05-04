@@ -1,0 +1,221 @@
+<?php
+
+require_once('../common/validation_function.php');
+
+
+function mi_valid_function($dato){
+	/* validadcion del dato*/
+	return true;
+}
+
+
+$rules = array(
+
+								/*Parametros del opt*/
+								"opt" => array(   "name" => "opción"
+															,"type" => "lstString"
+															,"lst" => array('getIni','getColonia','validRFC','getMontos','addSolUsu','getPDF')
+															,"error" => "Opción no valida"
+												)
+								
+								/*-getColonia--*/
+								,"id_cp" => array(   "name" => "Id Codigo Postal"
+																,"type" => "cp"
+																,"error" => "Debe de ser un Codigo Postal valido"
+													)
+								
+								/*-validRFC--*/
+								,"rfc" => array(   "name" => "RFC"
+															,"type" => "rfc"
+															,"error" => "Debe de ser un rfc valido"
+												)
+								
+								/*precio variable*/
+								,"precio_variable" => array( "name" => "Precio variable"
+																				,"type" => "float+"
+																				,"error" => "Error sobre el precio variable"
+																	)
+								
+								,"correo_e" => array( "name" => "Correo electronico"
+																	,"type" => "email"
+																	,"error" => "Debe de ingresar un email valido"
+														 )
+								
+								,"correo_usuario" => array( "name" => "Correo electronico"
+																				,"type" => "email"
+																				,"error" => "Debe de ingresar un email valido"
+																   )
+								
+								,"slcTipoUser" => array("name" => "Tipo de usuario registrado"
+																		,"type" => "lstString"
+																		,"lst" => array('usr_reg', 'no_usr_reg')
+																		,"error" => "Opción no valida"
+																)
+								
+								,"slcOrigenRFC" => array("name" => "RFC de facturación"
+																			,"type" => "rfc"
+																			,"error" => "Debe de ser un RFC valido"
+																)
+								
+								,"tipo_persona" => array("name" => "Tipo de persona"
+																			,"type" => "lstString"
+																			,"lst" => array('1','2')
+																			,"error" => "Debe de indicar el tipo de persona"
+																)
+								
+								,"id_municipio" => array("name" => "Id de municipio"
+																			,"type" => "int"
+																			,"error" => "Debe de indicar el municipio"
+																)
+												
+								,"id_edo" => array("name" => "Id de estado"
+																,"type" => "int"
+																,"error" => "Debe de indicar el estado"
+														)
+								
+								,"id_ciudad" => array("name" => "Id de ciudad"
+																	,"type" => "int"
+																	,"error" => "Debe de indicar la ciudad"
+															)	
+								
+								,"id_cp" => array("name" => "Id de código postal"
+																,"type" => "cp"
+																,"error" => "Debe de indicar el código postal"
+													)
+								
+								,"id_colonia" => array("name" => "Id de colonia"
+																	,"type" => "int"
+																	,"error" => "Debe de indicar la colonia"
+															)
+												
+								,"calle" => array("name" => "Calle"
+															,"type" => "textEsp"
+															,"error" => "Debe de indicar una calle valida"
+															)
+												
+								,"num_int" => array("name" => "Número interior"
+																,"type" => "textEsp"
+																,"error" => "Debe de indicar un número interior valido"
+														)
+								
+								,"nombre_fisc" => array("name" => "Nombre fiscal"
+																		,"type" => "textEsp"
+																		,"error" => "Debe de indicar un nombre fiscal valido"
+																)
+								
+								,"fnombre" => array("name" => "Nombre de persona fisica"
+																	,"type" => "textEsp"
+																	,"error" => "Debe de indicar un nombre valido"
+															)
+								
+								,"fap_paterno" => array("name" => "Apellido paterno"
+																		,"type" => "textEsp"
+																		,"error" => "Debe de indicar un apellido paterno valido"
+																)
+								
+								,"fap_materno" => array("name" => "Apellido materno"
+																		,"type" => "textEsp"
+																		,"error" => "Debe de indicar un apellido materno valido"
+																)
+								
+								,"txtOtraCol" => array("name" => "Otra colonia"
+																		,"type" => "textEsp"
+																		,"error" => "Debe de indicar un otra colonia valida"
+																)
+								
+								,"num_ext" => array("name" => "Número exterior"
+																	,"type" => "textEsp"
+																	,"error" => "Debe de indicar un úmero exterior valido"
+															)					
+								/*addSolUsu*/
+								
+								,"clave" => array( "name" => "Clave"
+																,"type" => "int"
+																,"error" => "Error #1"
+															)
+								,"cantidad" => array( "name" => "Cantidad"
+																,"type" => "int"
+																,"error" => "Error #2"
+															)
+							
+								,"conceptos" => array( "name" => "Conceptos"
+																,"type" => "array_concepto"
+																,"error" => "Error sobre los conceptos"
+															)
+								,"chFactura" => array( "name" => "Requiere factura"
+																,"type" => "booleanInt"
+																,"error" => "Error sobre el checkbox"
+															)
+								,"folio_sol" => array( "name" => "Folio de solicitud"
+																,"type" => "int"
+																,"error" => "Debe de ser un folio valido"
+															)
+					
+);
+
+
+$required_data = array(
+											'getIni' => array()
+										   ,'id_cp'  => array('id_cp')
+										   ,'rfc'  => array('rfc')	
+										   ,'getMontos' => array('clave','cantidad','precio_variable')
+										   ,'addSolUsu' => array('conceptos','chFactura')
+										   ,'getPDF' => array('folio_sol')
+);
+	
+$opt="not_option";
+
+foreach($_POST as $validName => $validData){
+	
+	if(isset($rules[$validName])){
+		
+		if(validField($validName, $validData)||($validData=="")){
+			$var = "\$" . $validName . "=0;";
+			eval($var);
+			$var = "\$ref=&$" . $validName . ";";
+			eval($var);
+			
+			if(isset($rules[$validName]["utf8_encode"])){
+				$validData = utf8_decode($validData);
+			}
+			
+			if(isset($rules[$validName]["addslashes"])){
+				$validData = addslashes($validData);
+			}
+			
+			$ref = $validData;
+		
+		}
+		else{
+			$json["error"] = true;
+			$json["msg"] = $rules[$validName]["error"];
+			die(json_encode($json));
+		}
+		
+	}
+}
+
+if($opt == "not_option"){
+	$json["error"] = true;
+	$json["msg"] = "operación no valida";
+	die(json_encode($json));
+}
+
+
+/* validar datos requeridos */
+if(isset($opt)&&isset($required_data[$opt])){
+	foreach($required_data[$opt] as $key => $name_data){
+	
+		if(!isset($_POST[$name_data])){
+			$json["error"] = true;
+			$json["msg"] = "No se puede continuar con la operación hacen falta datos";
+			//$json["debug"] = $rules[$name_data]["name"];
+			die(json_encode($json));
+		}
+		
+	}
+
+}
+
+
+?>

@@ -1,0 +1,19 @@
+
+.tDias td{
+	font-size:10pt;
+	padding: 4px;
+	border:solid 1px #CCCCCC;
+	color: #CCCCCC;
+	
+}
+
+.tDias td:hover { 
+    background-color:#8A0808;
+	color: #FFF;
+}
+
+.tdSelect{
+	background-color:#428bca;
+	color: #FFF;
+}
+
